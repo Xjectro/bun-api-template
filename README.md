@@ -8,8 +8,6 @@ This project is an API template built using Express.js, MongoDB, TypeScript, Mor
 - [Installation](#installation)
 - [Usage](#usage)
 - [Project Structure](#project-structure)
-- [API Endpoints](#api-endpoints)
-- [Contributing](#contributing)
 - [License](#license)
 
 ## ✨ Features
@@ -39,7 +37,7 @@ This project is an API template built using Express.js, MongoDB, TypeScript, Mor
     JWT_SECRET=
     MONGODB_HOST=
     MONGODB_PORT=
-    MONGODB_DB_NAME=w
+    MONGODB_DB_NAME=
     EMAIL_USER=
     EMAIL_PASS=
     ```
@@ -49,8 +47,8 @@ This project is an API template built using Express.js, MongoDB, TypeScript, Mor
 To start the server:
 ```bash
 npm run dev
-```
 
+## 📂 Project Structure
 📦 express-api-template
  ┣ 📂 src
  ┃ ┣ 📂 controllers
@@ -73,5 +71,5 @@ npm run dev
  ┣ 📜 README.md
  ┗ 📜 tsconfig.json
 
-# 📄 License
+## 📄 License
 I hope this README file clearly describes your project and makes it easier for other developers to understand and contribute! Let me know if you need any further changes or additions.
