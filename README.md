@@ -50,6 +50,7 @@ npm run dev
 ```
 
 ## 📂 Project Structure
+```bash
 📦 express-api-template
  ┣ 📂 src
  ┃ ┣ 📂 controllers
@@ -71,6 +72,9 @@ npm run dev
  ┣ 📜 package.json
  ┣ 📜 README.md
  ┗ 📜 tsconfig.json
+```
 
 ## 📄 License
+```bash
 I hope this README file clearly describes your project and makes it easier for other developers to understand and contribute! Let me know if you need any further changes or additions.
+```
