@@ -25,7 +25,7 @@ This project is an API template built using Express.js, MongoDB, TypeScript, Mor
 
 1. Clone the repository:
     ```bash
-    git clone https://github.com/your-username/express-api-template.git
+    git clone https://github.com/deverays/express-api-template.git
     ```
 2. Install the dependencies:
     ```bash
@@ -55,18 +55,18 @@ npm run dev
  ┣ 📂 src
  ┃ ┣ 📂 controllers
  ┃ ┃ ┣ 📂 auth
- ┃ ┃ ┣ 📂 middleware
+ ┃ ┃ ┣ 📂 middlewares
  ┃ ┃ ┣ 📂 routes
- ┃ ┃ ┣ 📂 validator
- ┃ ┃ ┣ 📜 index.ts
+ ┃ ┃ ┣ 📂 validators
+ ┃ ┃ ┗ 📜 index.ts
  ┃ ┣ 📂 database
  ┃ ┃ ┣ 📂 models
- ┃ ┃ ┣ 📜 dbConnection
+ ┃ ┃ ┗ 📜 dbConnection
  ┃ ┣ 📂 services
  ┃ ┃ ┣ 📜 db
- ┃ ┃ ┣ 📜 email
+ ┃ ┃ ┗ 📜 email
  ┃ ┣ 📂 utils
- ┃ ┣ 📜 app.ts
+ ┃ ┗ 📜 app.ts
  ┣ 📜 .env.example
  ┣ 📜 .gitignore
  ┣ 📜 package.json
