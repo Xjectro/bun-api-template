@@ -47,6 +47,7 @@ This project is an API template built using Express.js, MongoDB, TypeScript, Mor
 To start the server:
 ```bash
 npm run dev
+```
 
 ## 📂 Project Structure
 📦 express-api-template
