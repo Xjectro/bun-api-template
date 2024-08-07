@@ -12,9 +12,9 @@ import validateBody, {
     forgotPasswordSchema,
     refreshPasswordSchema,
     verifyRequestCodeSchema,
-} from "./validator";
+} from "./validators";
 import { getUser } from "./routes/users";
-import { auth } from "./middleware/jwt";
+import { auth } from "./middlewares/jwt";
 
 export const v1 = Router();
 
