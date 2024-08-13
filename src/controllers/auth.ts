@@ -1,13 +1,13 @@
 import { type Request, type Response } from "express";
-import { DbService } from "../../services/db";
-import { EmailService } from "../../services/email";
+import { DbService } from "../services/db";
+import { EmailService } from "../services/email";
+import { generateAccessToken, generateCode } from "../utils/auth";
 import {
     UnauthorizedError,
     DuplicatedDataError,
-} from "../../utils/commons/exceptions";
-import { exceptionResponse, response } from "../../utils/commons/response";
-import { generateAccessToken, generateCode } from "../auth";
-import { User } from "../../database/models/users";
+} from "../utils/commons/exceptions";
+import { exceptionResponse, response } from "../utils/commons/response";
+import { User } from "../database/models/users";
 
 const dbService = new DbService();
 const emailService = new EmailService();
@@ -22,14 +22,14 @@ export const login = async (req: Request, res: Response) => {
         }
 
         const payload = {
-            _id: user._id,
+            id: user.id,
             email: user.email,
             firstName: user.firstName,
             lastName: user.lastName,
-            createdAt: user.createdAt,
-            updatedAt: user.updatedAt,
             avatarURL: user.avatarURL,
             role: user.role,
+            createdAt: user.createdAt,
+            updatedAt: user.updatedAt,
         };
 
         const accessToken = generateAccessToken(payload);

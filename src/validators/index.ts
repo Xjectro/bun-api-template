@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from "express";
 import { z } from "zod";
-import { exceptionResponse } from "../../utils/commons/response";
-import { UnprocessableEntityError } from "../../utils/commons/exceptions";
+import { exceptionResponse } from "../utils/commons/response";
+import { UnprocessableEntityError } from "../utils/commons/exceptions";
 
 const validateBody = (schema: z.ZodObject<any, any>) => {
     return (req: Request, res: Response, next: NextFunction) => {
@@ -30,4 +30,5 @@ const validateBody = (schema: z.ZodObject<any, any>) => {
 };
 
 export default validateBody;
-export * from "./authSchema";
+export * from "./schemas/authSchema";
+export * from "./schemas/postSchema";

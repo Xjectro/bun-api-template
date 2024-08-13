@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
-import { response, exceptionResponse } from "../../utils/commons/response";
+import { response, exceptionResponse } from "../utils/commons/response";
 
-export const getUser = async (req: Request, res: Response) => {
+export const me = async (req: Request, res: Response) => {
     try {
         const user = res.locals.user;
         return response(res, {

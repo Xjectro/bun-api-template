@@ -1,11 +1,11 @@
 {
-  "name": "express-api-template",
+  "name": "server",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "src/server.ts",
   "scripts": {
-    "start": "node src/app.ts",
-    "dev": "nodemon src/app.ts",
+    "start": "node src/server.ts",
+    "dev": "nodemon src/server.ts",
     "format": "prettier --write src/"
   },
   "keywords": [],
@@ -36,6 +36,7 @@
     "multer": "^1.4.5-lts.1",
     "nodemailer": "^6.9.14",
     "nodemon": "^3.1.0",
+    "pg": "^8.12.0",
     "uuid": "^10.0.0",
     "zod": "^3.23.8"
   },

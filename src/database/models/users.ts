@@ -19,7 +19,7 @@ export interface Request {
 }
 
 export interface UserType extends mongoose.Document {
-    _id: mongoose.Types.ObjectId;
+    userId: string;
     firstName: string;
     lastName: string;
     email: string;
@@ -34,6 +34,10 @@ export interface UserType extends mongoose.Document {
 
 const userSchema: mongoose.Schema<UserType> = new Schema<UserType>(
     {
+        userId: {
+            type: String,
+            required: true,
+        },
         firstName: {
             type: String,
             required: true,
@@ -103,4 +107,4 @@ userSchema.methods.checkPassword = async function (
     }
 };
 
-export const User = mongoose.model("users", userSchema);
+export const User = mongoose.model("user", userSchema);

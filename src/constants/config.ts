@@ -3,6 +3,7 @@ export enum Env {
     development = 'development',
     test = 'test',
 }
+
 export const initConfig = () => {
     switch (config.env) {
         case Env.production:
@@ -22,14 +23,10 @@ export const initConfig = () => {
 export const config = {
     env: process.env.NODE_ENV,
     port: process.env.PORT,
-    baseUrl: process.env.BASE_URL,
-    logLevel: process.env.LOG_LEVEL,
     mongoDB: {
         host: process.env.MONGODB_HOST,
         port: process.env.MONGODB_PORT,
         dbName: process.env.MONGODB_DB_NAME,
-        username: process.env.MONGODB_USERNAME,
-        password: process.env.MONGODB_PASSWORD
     },
     secrets: {
         jwt: process.env.JWT_SECRET,

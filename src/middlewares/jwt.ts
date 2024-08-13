@@ -3,9 +3,9 @@ import {
     NotFoundError,
     UnauthorizedError,
     ForbiddenAccessError,
-} from "../../utils/commons/exceptions";
-import { exceptionResponse } from "../../utils/commons/response";
-import { verifyAccessToken } from "../auth/accessToken";
+} from "../utils/commons/exceptions";
+import { exceptionResponse } from "../utils/commons/response";
+import { verifyAccessToken } from "../utils/auth";
 
 interface CustomRequest extends Request {
     user: string | undefined;
