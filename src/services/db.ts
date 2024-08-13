@@ -1,4 +1,3 @@
-import { Post, PostType } from "../database/models/posts";
 import { User, UserType } from "../database/models/users";
 import { v4 as uuidV4 } from "uuid";
 
@@ -18,14 +17,6 @@ export class DbService {
                     [userData.firstName, userData.lastName].filter(Boolean).join(" ")
                 )}`,
                 role: "USER",
-            });
-        },
-        post: async (
-            postData: Partial<Pick<PostType, "content">>
-        ): Promise<any> => {
-            return await Post.create({
-                postId: uuidV4(),
-                ...postData,
             });
         },
     };
