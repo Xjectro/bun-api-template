@@ -6,7 +6,6 @@ import {
 } from "../utils/commons/exceptions";
 import { exceptionResponse } from "../utils/commons/response";
 import { verifyAccessToken } from "../utils/auth/accessToken";
-import { User } from "../database/models/users";
 
 interface CustomRequest extends Request {
   user?: any;

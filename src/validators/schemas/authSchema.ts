@@ -24,4 +24,5 @@ export const authRefreshPasswordSchema = z.object({
 
 export const authVerifyRequestCodeSchema = z.object({
   code: z.string().min(1, "Code is required"),
+  action: z.string().min(1, "Action is required"),
 });

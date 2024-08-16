@@ -143,7 +143,7 @@ export const authRefreshPassword = async (req: Request, res: Response) => {
 
 export const authVerifyRequestCode = async (req: Request, res: Response) => {
   try {
-    const { code } = req.body;
+    const { code, action } = req.body;
 
     const user = await User.findOne({ "requests.code": code }).exec();
     if (!user) {
@@ -151,19 +151,27 @@ export const authVerifyRequestCode = async (req: Request, res: Response) => {
     }
 
     const request = user.requests.find((req) => req.code === code);
-    if (!request || new Date(request.expiresAt) <= new Date()) {
+    if (
+      request.action !== action &&
+      (!request || new Date(request.expiresAt) <= new Date())
+    ) {
       throw new UnauthorizedError("Code is expired or action does not match!");
+    }
+
+    const content: any = {};
+
+    content.expiresAt = request.expiresAt;
+    content.accessToken = user.accessToken;
+
+    if (action == "login") {
+      content.refreshToken = user.refreshToken;
     }
 
     return response(res, {
       code: 201,
       success: true,
       message: "Code is valid. You can proceed with the reset.",
-      content: {
-        expiresAt: request.expiresAt,
-        accessToken: user.accessToken,
-        refreshToken: user.refreshToken,
-      },
+      content,
     });
   } catch (error) {
     return exceptionResponse(res, error);
