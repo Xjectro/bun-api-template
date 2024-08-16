@@ -7,6 +7,6 @@ import { config } from "./constants";
 const httpServer = http.createServer(app);
 
 httpServer.listen(config.port, function () {
-    dbConnection();
-    console.log(`Server listening on port ${config.port}`);
+  dbConnection();
+  console.log(`Server listening on port ${config.port}`);
 });

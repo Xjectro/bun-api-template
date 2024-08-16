@@ -17,8 +17,10 @@ app.use(cors());
 app.use(helmet());
 app.use(limiter);
 app.use(bodyParserJson());
-app.use(morgan(":method :url :status :res[content-length] - :response-time ms"));
+app.use(
+  morgan(":method :url :status :res[content-length] - :response-time ms"),
+);
 
-app.use("/api/v1", router);
+app.use("/api", router);
 
 export default app;

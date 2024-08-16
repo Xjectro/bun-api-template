@@ -2,26 +2,26 @@ import nodemailer, { Transporter } from "nodemailer";
 import { config } from "../constants";
 
 interface EmailOptions {
-    to: string;
-    subject: string;
-    html: string;
+  to: string;
+  subject: string;
+  html: string;
 }
 
-export class EmailService {
-    private transporter: Transporter;
+export class EmailClient {
+  private transporter: Transporter;
 
-    constructor() {
-        this.transporter = nodemailer.createTransport({
-            service: "Gmail",
-            auth: {
-                user: config.email.user,
-                pass: config.email.pass,
-            },
-        });
-    }
+  constructor() {
+    this.transporter = nodemailer.createTransport({
+      service: "Gmail",
+      auth: {
+        user: config.email.user,
+        pass: config.email.pass,
+      },
+    });
+  }
 
-    private generateHtmlTemplate(htmlContent: string): string {
-        return `
+  private generateHtmlTemplate(htmlContent: string): string {
+    return `
             <!DOCTYPE html>
             <html>
             <head>
@@ -59,23 +59,24 @@ export class EmailService {
                 </style>
                 ${htmlContent}
             </body>
-            </html>`;
-    }
+            </html>
+        `;
+  }
 
-    async sendEmail({ to, subject, html }: EmailOptions): Promise<void> {
-        const mailOptions = {
-            from: config.email.user,
-            to,
-            subject,
-            html: this.generateHtmlTemplate(html),
-        };
+  async sendEmail({ to, subject, html }: EmailOptions): Promise<void> {
+    const mailOptions = {
+      from: config.email.user,
+      to,
+      subject,
+      html: this.generateHtmlTemplate(html),
+    };
 
-        try {
-            await this.transporter.sendMail(mailOptions);
-            console.log(`Email sent to ${to}`);
-        } catch (error) {
-            console.error(`Error sending email to ${to}:`, error);
-            throw new Error(`Failed to send email: ${error.message}`);
-        }
+    try {
+      await this.transporter.sendMail(mailOptions);
+      console.log(`Email sent to ${to}`);
+    } catch (error) {
+      console.error(`Error sending email to ${to}:`, error);
+      throw new Error(`Failed to send email: ${error.message}`);
     }
+  }
 }
