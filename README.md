@@ -53,20 +53,23 @@ npm run dev
 ```bash
 📦 express-api-template
  ┣ 📂 src
+ ┃ ┣ 📂 clients
+ ┃ ┃ ┗ 📜 Email
  ┃ ┣ 📂 controllers
- ┃ ┃ ┣ 📂 auth
- ┃ ┃ ┣ 📂 middlewares
- ┃ ┃ ┣ 📂 routes
- ┃ ┃ ┣ 📂 validators
- ┃ ┃ ┗ 📜 index.ts
+ ┃ ┃ ┣ 📜 token.ts
+ ┃ ┃ ┣ 📜 users.ts
+ ┃ ┃ ┗ 📜 auth.ts
  ┃ ┣ 📂 database
  ┃ ┃ ┣ 📂 models
  ┃ ┃ ┗ 📜 dbConnection
  ┃ ┣ 📂 services
- ┃ ┃ ┣ 📜 db
- ┃ ┃ ┗ 📜 email
+ ┃ ┃ ┗ 📜 dbServices
+ ┃ ┣ 📂 middlewares
+ ┃ ┣ 📂 validators
+ ┃ ┣ 📂 routes
  ┃ ┣ 📂 utils
- ┃ ┗ 📜 app.ts
+ ┃ ┣ 📜 app.ts
+ ┃ ┗ 📜 server.ts
  ┣ 📜 .env.example
  ┣ 📜 .gitignore
  ┣ 📜 package.json
