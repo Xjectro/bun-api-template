@@ -23,13 +23,14 @@ export const initConfig = () => {
 export const config = {
   env: process.env.NODE_ENV,
   port: process.env.PORT,
+  baseUrl: process.env.BASE_URL,
   mongoDB: {
     host: process.env.MONGODB_HOST,
     port: process.env.MONGODB_PORT,
     dbName: process.env.MONGODB_DB_NAME,
   },
   secrets: {
-    jwt: process.env.JWT_SECRET,
+    jwt: process.env.JWT_SECRET as string,
     jwtExp: 31557600,
   },
   email: {

@@ -2,10 +2,10 @@ class CustomError extends Error {
   constructor(
     public code: number,
     message: string,
-    public content?: any,
+    public data?: any,
   ) {
     super(message);
-    this.content = content;
+    this.data = data;
   }
 }
 

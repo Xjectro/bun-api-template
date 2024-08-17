@@ -13,7 +13,7 @@ export const connect = async (): Promise<void> => {
     console.log(
       termcolors.fgGreen + "Connected to database" + termcolors.reset,
     );
-  } catch (err) {
+  } catch (err: any) {
     console.error(
       termcolors.fgRed +
         `Couldn't connect to database. ${err.message}` +

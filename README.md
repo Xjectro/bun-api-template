@@ -56,24 +56,26 @@ npm run dev
 ```bash
 📦 express-api-template
  ┣ 📂 src
- ┃ ┣ 📂 clients
- ┃ ┃ ┗ 📜 Email.ts
  ┃ ┣ 📂 controllers
- ┃ ┃ ┣ 📜 token.ts
- ┃ ┃ ┣ 📜 users.ts
- ┃ ┃ ┗ 📜 auth.ts
+ ┃ ┃ ┣ 📜 token.ctrl.ts
+ ┃ ┃ ┣ 📜 users.ctrl.ts
+ ┃ ┃ ┗ 📜 auth.ctrl.ts
  ┃ ┣ 📂 database
  ┃ ┃ ┣ 📂 models
  ┃ ┃ ┗ 📜 dbConnection
  ┃ ┣ 📂 services
+ ┃ ┣ ┣ 📜 alertServices
  ┃ ┃ ┗ 📜 dbServices
- ┃ ┣ 📂 middlewares
- ┃ ┣ 📂 validators
+ ┃ ┣ 📂 infrastructure
  ┃ ┣ 📂 routes
  ┃ ┣ 📂 utils
- ┃ ┣ 📜 app.ts
+ ┃ ┣ 📜 index.ts
  ┃ ┗ 📜 server.ts
+ ┣ 📂 test
  ┣ 📜 .env.example
+ ┣ 📜 jest.config.js
+ ┣ 📜 LICENSE
+ ┣ 📜 nodemon.json
  ┣ 📜 .gitignore
  ┣ 📜 package.json
  ┣ 📜 README.md
