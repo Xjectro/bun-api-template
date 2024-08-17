@@ -68,6 +68,7 @@ npm run dev
  ┃ ┃ ┗ 📜 dbServices
  ┃ ┣ 📂 infrastructure
  ┃ ┣ 📂 routes
+ ┃ ┣ 📂 utils
  ┃ ┣ 📜 index.ts
  ┃ ┗ 📜 server.ts
  ┣ 📂 test
