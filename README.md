@@ -41,6 +41,7 @@ This project is an API template built using Express.js, MongoDB, TypeScript, Mor
    EMAIL_USER=
    EMAIL_PASS=
    NODE_ENV=
+   BASE_URL=
    ```
 
 ## 🛠 Usage
