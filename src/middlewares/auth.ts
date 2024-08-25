@@ -1,0 +1,78 @@
+import { type Request, type Response, type NextFunction } from "express";
+import {
+  NotFoundError,
+  UnauthorizedError,
+  ForbiddenAccessError,
+} from "../utils/exceptions";
+import { exceptionResponse } from "../api/response";
+import { verifyAccessToken } from "../utils/auth/accessToken";
+import { User } from "../database/models/user.model";
+import { UserAuth } from "../database/models/userAuth.model";
+
+interface CustomRequest extends Request {
+  user?: any;
+}
+
+export const auth = async (req: Request, res: Response, next: NextFunction) => {
+  const authHeader = req.headers["authorization"] as string;
+
+  const token = authHeader?.replace("Bearer", "").trim();
+
+  try {
+    if (!token) {
+      throw new NotFoundError("A token is required for authentication");
+    }
+
+    const decoded = verifyAccessToken(token);
+
+    if (!decoded) {
+      throw new UnauthorizedError("Your token does not match our credentials");
+    }
+
+    const userAuth = await UserAuth.findOne({ user: decoded.id })
+      .select("email role user")
+      .exec();
+
+    if (!userAuth) {
+      throw new UnauthorizedError("Your token does not match our credentials");
+    }
+
+    const user = await User.findById(userAuth.user)
+      .select("firstName lastName avatarURL createdAt updatedAt")
+      .exec();
+
+    if (!user) {
+      throw new UnauthorizedError("User details could not be found");
+    }
+
+    const data = { ...user.toObject() };
+
+    const { user_id, ...userData } = data;
+
+    res.locals = {
+      user: { id: user_id, ...userData },
+    };
+
+    next();
+  } catch (error: any) {
+    return exceptionResponse(res, error);
+  }
+};
+
+export const verifyRole = (roles: string[]) => {
+  return (req: CustomRequest, res: Response, next: NextFunction) => {
+    try {
+      const user = req.user;
+
+      if (user && roles.includes(user.role)) {
+        return next();
+      }
+
+      throw new ForbiddenAccessError(
+        "You are not allowed to access this resource!",
+      );
+    } catch (error: any) {
+      return exceptionResponse(res, error);
+    }
+  };
+};
