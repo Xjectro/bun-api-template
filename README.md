@@ -1,4 +1,4 @@
-# 🚀 Express API Template
+# 🚀 Bun API Template
 
 This project is an API template built using Express.js, MongoDB, TypeScript, Morgan, HTTP, express-rate-limit, body-parser, Zod, nodemailer, and jsonwebtoken.
 
@@ -58,18 +58,12 @@ npm run dev
 📦 express-api-template
  ┣ 📂 src
  ┃ ┣ 📂 controllers
- ┃ ┃ ┣ 📜 token.ctrl.ts
- ┃ ┃ ┣ 📜 users.ctrl.ts
- ┃ ┃ ┗ 📜 auth.ctrl.ts
  ┃ ┣ 📂 database
- ┃ ┃ ┣ 📂 models
- ┃ ┃ ┗ 📜 dbConnection
  ┃ ┣ 📂 services
- ┃ ┣ ┣ 📜 alertServices
- ┃ ┃ ┗ 📜 dbServices
- ┃ ┣ 📂 infrastructure
  ┃ ┣ 📂 routes
+ ┃ ┣ 📂 middlewares
  ┃ ┣ 📂 utils
+ ┃ ┣ 📂 validator
  ┃ ┣ 📜 index.ts
  ┃ ┗ 📜 server.ts
  ┣ 📂 test
@@ -79,6 +73,7 @@ npm run dev
  ┣ 📜 nodemon.json
  ┣ 📜 .gitignore
  ┣ 📜 package.json
+ ┣ 📜 bun.lockb
  ┣ 📜 README.md
  ┗ 📜 tsconfig.json
 ```
