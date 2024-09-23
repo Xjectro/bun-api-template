@@ -38,7 +38,7 @@ export const auth = async (req: Request, res: Response, next: NextFunction) => {
 
     const user = await User.findById(userAuth.user)
       .select(
-        "firstName lastName username avatarURL user_id createdAt updatedAt",
+        "firstName lastName username avatarURL user_id description createdAt updatedAt",
       )
       .exec();
 
@@ -46,9 +46,20 @@ export const auth = async (req: Request, res: Response, next: NextFunction) => {
       throw new UnauthorizedError("User details could not be found");
     }
 
-    const { user_id: id, ...data } = user.toObject({ virtuals: true });
+    const { user_id, firstName, lastName, username, avatarURL, description } =
+      user.toObject({ virtuals: true });
+
     res.locals = {
-      user: { id, ...data, role: userAuth.role },
+      user: {
+        _id: userAuth.user,
+        id: user_id,
+        firstName,
+        lastName,
+        username,
+        avatarURL,
+        description,
+        role: userAuth.role,
+      },
     };
 
     next();

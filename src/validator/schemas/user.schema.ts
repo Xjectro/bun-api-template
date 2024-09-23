@@ -7,5 +7,10 @@ export const meUpdateSchema = z.object({
     .max(20, { message: "Username must be at most 20 characters long" })
     .regex(/^\S*$/, { message: "Username cannot contain spaces" })
     .optional(),
+  description: z
+    .string()
+    .min(10, { message: "Description must be at least 10 characters long" })
+    .max(180, { message: "Description must be at most 180 characters long" })
+    .optional(),
   avatarURL: z.string().optional(),
 });

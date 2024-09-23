@@ -12,6 +12,7 @@ export interface UserType extends mongoose.Document {
   _id: mongoose.Schema.Types.ObjectId;
   user_id: string;
   username: string;
+  description: string;
   firstName: string;
   lastName: string;
   avatarURL: string;
@@ -30,6 +31,11 @@ const userSchema: mongoose.Schema<UserType> = new Schema<UserType>(
     username: {
       type: String,
       required: [true, "Username is required"],
+    },
+    description: {
+      type: String,
+      required: false,
+      default: "hello!",
     },
     firstName: {
       type: String,

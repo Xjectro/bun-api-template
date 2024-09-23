@@ -18,7 +18,11 @@ export default class UsersHelpers {
 
     const state = updateStates(rest);
 
-    await User.updateOne({ _id: user._id }, { $set: state }).exec();
+    await User.updateOne(
+      { _id: user._id },
+      { $set: state },
+      { upsert: true },
+    ).exec();
   }
 
   public async getUserConnections(user: string) {
