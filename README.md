@@ -24,7 +24,7 @@ This project is an API template built using Express.js, MongoDB, Bunny, TypeScri
 
 1. Clone the repository:
    ```bash
-   git clone https://github.com/deverays/express-api-template.git
+   git clone https://github.com/Xjectro/bun-api-template.git
    ```
 2. Install the dependencies:
    ```bash
