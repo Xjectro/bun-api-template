@@ -75,6 +75,6 @@ userAuthSchema.methods.comparePassword = async function (
 };
 
 export const UserAuth = mongoose.model<UserAuthType>(
-  "UserAuth",
+  "userAuth",
   userAuthSchema,
 );

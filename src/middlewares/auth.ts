@@ -15,7 +15,6 @@ interface CustomRequest extends Request {
 
 export const auth = async (req: Request, res: Response, next: NextFunction) => {
   const authHeader = req.headers["authorization"] as string;
-
   const token = authHeader?.replace("Bearer", "").trim();
 
   try {
@@ -38,19 +37,18 @@ export const auth = async (req: Request, res: Response, next: NextFunction) => {
     }
 
     const user = await User.findById(userAuth.user)
-      .select("firstName lastName avatarURL createdAt updatedAt")
+      .select(
+        "firstName lastName username avatarURL user_id createdAt updatedAt",
+      )
       .exec();
 
     if (!user) {
       throw new UnauthorizedError("User details could not be found");
     }
 
-    const data = { ...user.toObject() };
-
-    const { user_id, ...userData } = data;
-
+    const { user_id: id, ...data } = user.toObject({ virtuals: true });
     res.locals = {
-      user: { id: user_id, ...userData },
+      user: { id, ...data, role: userAuth.role },
     };
 
     next();
@@ -62,7 +60,7 @@ export const auth = async (req: Request, res: Response, next: NextFunction) => {
 export const verifyRole = (roles: string[]) => {
   return (req: CustomRequest, res: Response, next: NextFunction) => {
     try {
-      const user = req.user;
+      const user = res.locals.user;
 
       if (user && roles.includes(user.role)) {
         return next();

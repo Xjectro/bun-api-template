@@ -37,10 +37,16 @@ export const config = {
     user: process.env.EMAIL_USER,
     pass: process.env.EMAIL_PASS,
   },
-  X: {
-    clientId: process.env.X_CLIENT_ID as string,
-    clientSecret: process.env.X_CLIENT_SECRET as string,
-    redirectUri: process.env.X_REDIRECT_URI as string,
+  bunny: {
+    accessKey: process.env.BUNNY_ACCESS_KEY,
+    stroageName: process.env.BUNNY_STORAGE_NAME,
+    hostName: process.env.BUNNY_HOST_NAME,
+  },
+  discord: {
+    redirectUri: process.env.DISCORD_REDIRECT_URI as string,
+    clientId: process.env.DISCORD_CLIENT_ID as string,
+    clientSecret: process.env.DISCORD_CLIENT_SECRET as string,
+    token: process.env.DISCORD_TOKEN as string,
   },
   saltWorkFactor: 10,
 };

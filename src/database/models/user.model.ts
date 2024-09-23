@@ -15,6 +15,7 @@ export interface UserType extends mongoose.Document {
   firstName: string;
   lastName: string;
   avatarURL: string;
+  isOnline: boolean;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -37,6 +38,10 @@ const userSchema: mongoose.Schema<UserType> = new Schema<UserType>(
     lastName: {
       type: String,
       required: [true, "Last name is required"],
+    },
+    isOnline: {
+      type: Boolean,
+      default: false,
     },
     avatarURL: {
       type: String,

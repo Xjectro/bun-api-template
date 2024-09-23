@@ -48,6 +48,6 @@ const connectionSchema = new Schema<ConnectionType>(
 );
 
 export const Connection = mongoose.model<ConnectionType>(
-  "Connection",
+  "connection",
   connectionSchema,
 );

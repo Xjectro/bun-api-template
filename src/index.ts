@@ -7,7 +7,7 @@ import { config } from "./constants";
 
 const PORT = config.port;
 const app = express();
-new Server(app);
+const server = new Server(app);
 const httpServer = http.createServer(app);
 
 httpServer.listen(PORT, function () {

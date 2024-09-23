@@ -1,70 +1,71 @@
 import { type Request, type Response } from "express";
-import { response, exceptionResponse } from "../api/response";
-import { createUser } from "../services/db.services";
-import { sendEmail } from "../utils/transport/email";
-import { generateCode } from "../utils/auth/code";
-import { UnauthorizedError, DuplicatedDataError } from "../utils/exceptions";
-import { User } from "../database/models/user.model";
-import { UserAuth } from "../database/models/userAuth.model";
-import { Transaction } from "../database/models/transaction.model";
-import { generateAccessToken } from "../utils/auth/accessToken";
+import { exceptionResponse, response } from "../../api/response";
+import { createUser } from "../../services/db.services";
+import AuthHelpers from "./helpers.utils";
+import { generateAccessToken } from "../../utils/auth/accessToken";
+import { UnauthorizedError } from "../../utils/exceptions";
+import { UserAuth } from "../../database/models/userAuth.model";
+import { sendEmail } from "../../utils/transport/email";
+import { Transaction } from "../../database/models/transaction.model";
+import { generateCode } from "../../utils/auth/code";
+import { readFile } from "fs/promises";
+import path from "path";
 
 export default class AuthController {
-  public async login(req: Request, res: Response) {
+  private helpers: AuthHelpers;
+
+  constructor() {
+    this.helpers = new AuthHelpers();
+  }
+
+  login = async (req: Request, res: Response) => {
     try {
       const { email, password } = req.body;
-
-      const userAuth = await UserAuth.findOne({ email }).exec();
-      if (!userAuth || !(await userAuth.comparePassword(password))) {
-        throw new UnauthorizedError("Email or password is incorrect!");
-      }
-
-      const user = await User.findById(userAuth.user).exec();
-      if (!user) {
-        throw new UnauthorizedError("Email or password is incorrect!");
-      }
+      await this.helpers.validateCredentials(email, password);
+      const user = await this.helpers.getUser(email);
 
       const verificationCode = generateCode({ length: 5 });
-
       await Transaction.create({
-        user: userAuth.user,
+        user: user._id,
         action: "login",
         code: verificationCode,
         expiresAt: new Date(Date.now() + 180 * 1000),
       });
 
+      const html = await readFile(
+        path.join(
+          __dirname,
+          "..",
+          "..",
+          "..",
+          "templates",
+          "html",
+          "auth",
+          "login.html",
+        ),
+        "utf-8",
+      );
+
       await sendEmail({
-        to: userAuth.email,
+        to: email,
         subject: `${user.firstName} Your login code`,
-        html: `<section><h3>Login Code</h3><p>This is your login code <strong><u>${verificationCode}</u></strong></p></section>`,
+        html: html.replace("{code}", verificationCode),
       });
 
       return response(res, {
         code: 201,
         success: true,
-        message: "Successfully sent verification code",
+        message: "Successfully sent verification code.",
       });
     } catch (error: any) {
       return exceptionResponse(res, error);
     }
-  }
+  };
 
-  public async register(req: Request, res: Response) {
+  register = async (req: Request, res: Response) => {
     try {
       const { email, username, ...rest } = req.body;
-      
-      const user = await User.findOne({ username }).exec();
-
-      if (user) {
-        throw new DuplicatedDataError("User already exists!");
-      }
-
-      const userAuth = await UserAuth.findOne({ email }).exec();
-
-      if (userAuth) {
-        throw new DuplicatedDataError("User already exists 2!");
-      }
-
+      await this.helpers.checkUserExists(username, email);
       await createUser({ email, username, ...rest });
 
       return response(res, {
@@ -75,19 +76,15 @@ export default class AuthController {
     } catch (error: any) {
       return exceptionResponse(res, error);
     }
-  }
+  };
 
-  public async forgotPassword(req: Request, res: Response) {
+  forgotPassword = async (req: Request, res: Response) => {
     try {
       const { email, ref } = req.body;
-
-      const userAuth = await UserAuth.findOne({ email }).exec();
-      if (!userAuth) {
-        throw new UnauthorizedError("Email is incorrect!");
-      }
+      const userAuth = await this.helpers.getUserAuth(email);
 
       const code = generateCode({ length: 24 });
-      const updatedRef = ref.replace("{code}", code);
+      const updatedRef = ref.replace("[code]", code);
 
       await Transaction.create({
         user: userAuth.user,
@@ -97,10 +94,24 @@ export default class AuthController {
         expiresAt: new Date(Date.now() + 180 * 1000),
       });
 
+      const html = await readFile(
+        path.join(
+          __dirname,
+          "..",
+          "..",
+          "..",
+          "templates",
+          "html",
+          "auth",
+          "forgotPassword.html",
+        ),
+        "utf-8",
+      );
+
       await sendEmail({
-        to: userAuth.email,
+        to: email,
         subject: "Password reset link",
-        html: `<section><h3>Forgot Password</h3><p>This is your password <a href=${updatedRef}><strong><u>reset link</u></strong></a></p></section>`,
+        html: html.replace("{href}", updatedRef),
       });
 
       return response(res, {
@@ -111,14 +122,15 @@ export default class AuthController {
     } catch (error: any) {
       return exceptionResponse(res, error);
     }
-  }
+  };
 
-  public async refreshPassword(req: Request, res: Response) {
+  refreshPassword = async (req: Request, res: Response) => {
     try {
       const { newPassword } = req.body;
-      const { id } = res.locals.user;
+      const user = res.locals.user;
 
-      const userAuth = await UserAuth.findById(id).exec();
+      const userAuth = await UserAuth.findOne({ user: user._id }).exec();
+
       if (!userAuth) {
         throw new UnauthorizedError("User not found!");
       }
@@ -137,9 +149,9 @@ export default class AuthController {
     } catch (error: any) {
       return exceptionResponse(res, error);
     }
-  }
+  };
 
-  public async code(req: Request, res: Response) {
+  code = async (req: Request, res: Response) => {
     try {
       const { code, action } = req.body;
 
@@ -169,7 +181,6 @@ export default class AuthController {
         expiresAt: transaction.expiresAt,
         access_token: generateAccessToken({
           id: userAuth.user,
-          email: userAuth.email,
         }),
       };
 
@@ -186,5 +197,5 @@ export default class AuthController {
     } catch (error: any) {
       return exceptionResponse(res, error);
     }
-  }
+  };
 }

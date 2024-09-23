@@ -1,12 +1,12 @@
 import { Router } from "express";
-import AuthController from "../controllers/auth.ctrl";
-import validateBody, { authSchemas } from "../validator";
+import AuthController from "../controllers/auth/index.ctrl";
+import validateBody, { authSchema } from "../validator";
 import { auth } from "../middlewares/auth";
 
 class AuthRoutes {
   public router = Router();
   private controller = new AuthController();
-  private schema = authSchemas;
+  private schema = authSchema;
 
   constructor() {
     this.router.post(

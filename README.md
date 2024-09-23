@@ -1,6 +1,6 @@
-# 🚀 Bun API Template
+# 🚀 Server
 
-This project is an API template built using Express.js, MongoDB, TypeScript, Morgan, HTTP, express-rate-limit, body-parser, Zod, nodemailer, and jsonwebtoken.
+This project is an API template built using Express.js, MongoDB, Bunny, TypeScript, Morgan, HTTP, express-rate-limit, body-parser, Multer, Zod, nodemailer, and jsonwebtoken.
 
 ## 📋 Table of Contents
 
@@ -8,7 +8,6 @@ This project is an API template built using Express.js, MongoDB, TypeScript, Mor
 - [Installation](#installation)
 - [Usage](#usage)
 - [Project Structure](#project-structure)
-- [License](#license)
 
 ## ✨ Features
 
@@ -29,19 +28,31 @@ This project is an API template built using Express.js, MongoDB, TypeScript, Mor
    ```
 2. Install the dependencies:
    ```bash
-   npm install
+   bun install
    ```
 3. Create a `.env` file and add the necessary environment variables:
    ```env
    PORT=5000
-   JWT_SECRET=
-   MONGODB_HOST=
-   MONGODB_PORT=
-   MONGODB_DB_NAME=
+   JWT_SECRET=D04rSbcNX5
+   
+   MONGODB_HOST=127.0.0.1
+   MONGODB_PORT=27017
+   MONGODB_DB_NAME=server
+   
    EMAIL_USER=
    EMAIL_PASS=
-   NODE_ENV=
-   BASE_URL=
+   
+   NODE_ENV=test
+   BASE_URL=http://localhost:5000
+   
+   DISCORD_REDIRECT_URI=http://localhost:3000/callback/discord
+   DISCORD_CLIENT_ID=
+   DISCORD_CLIENT_SECRET=
+   DISCORD_TOKEN=
+   
+   BUNNY_ACCESS_KEY=
+   BUNNY_STORAGE_NAME=
+   BUNNY_HOST_NAME=
    ```
 
 ## 🛠 Usage
@@ -49,24 +60,33 @@ This project is an API template built using Express.js, MongoDB, TypeScript, Mor
 To start the server:
 
 ```bash
-npm run dev
+bun run dev
 ```
 
 ## 📂 Project Structure
 
 ```bash
 📦 express-api-template
+ ┣ 📂 public
+ ┃ ┗ 📜 .gitkeep
  ┣ 📂 src
+ ┃ ┣ 📂 api
+ ┃ ┣ 📂 constants
  ┃ ┣ 📂 controllers
  ┃ ┣ 📂 database
- ┃ ┣ 📂 services
- ┃ ┣ 📂 routes
  ┃ ┣ 📂 middlewares
+ ┃ ┣ 📂 routes
+ ┃ ┣ 📂 services
  ┃ ┣ 📂 utils
  ┃ ┣ 📂 validator
  ┃ ┣ 📜 index.ts
  ┃ ┗ 📜 server.ts
  ┣ 📂 test
+ ┃ ┗ 📜 apis.test.ts
+ ┣ 📂 templates
+ ┃ ┣ 📂 css
+ ┃ ┣ 📂 html
+ ┃ ┗ 📂 scripts
  ┣ 📜 .env.example
  ┣ 📜 jest.config.js
  ┣ 📜 LICENSE
@@ -78,8 +98,3 @@ npm run dev
  ┗ 📜 tsconfig.json
 ```
 
-## 📄 License
-
-```bash
-I hope this README file clearly describes your project and makes it easier for other developers to understand and contribute! Let me know if you need any further changes or additions.
-```

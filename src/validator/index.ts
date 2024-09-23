@@ -1,29 +1,20 @@
 import { type Request, type Response, type NextFunction } from "express";
 import { z } from "zod";
 import { exceptionResponse } from "../api/response";
-import { UnprocessableEntityError } from "../utils/exceptions";
-import * as authSchemas from "./schemas/auth";
-import * as tokenSchemas from "./schemas/token";
-import * as connectionSchemas from "./schemas/connection";
+import { extractValidationErrors, throwValidationError } from "./helpers.util";
+import * as authSchema from "./schemas/auth.schema";
+import * as tokenSchema from "./schemas/token.schema";
+import * as userSchema from "./schemas/user.schema";
 
 const validateBody = (schema: z.ZodObject<any, any>) => {
   return (req: Request, res: Response, next: NextFunction) => {
     try {
       const result = schema.safeParse(req.body);
       if (result.success) return next();
-      let extractedErrors: any = [];
-      result.error.issues.map((issue) => {
-        issue.message = issue.message.replace(/_/g, " ");
-        extractedErrors.push({
-          [issue.path[0]]: issue.message,
-        });
-      });
 
-      if (extractedErrors.length > 0)
-        throw new UnprocessableEntityError(
-          "Validation Failed",
-          extractedErrors,
-        );
+      const extractedErrors = extractValidationErrors(result);
+      console.log(extractedErrors);
+      throwValidationError(extractedErrors);
 
       return next();
     } catch (error: any) {
@@ -33,4 +24,4 @@ const validateBody = (schema: z.ZodObject<any, any>) => {
 };
 
 export default validateBody;
-export { authSchemas, tokenSchemas, connectionSchemas };
+export { authSchema, tokenSchema, userSchema };

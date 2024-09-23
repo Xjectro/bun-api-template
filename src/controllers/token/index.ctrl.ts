@@ -1,12 +1,19 @@
 import { type Request, type Response } from "express";
-import { response, exceptionResponse } from "../api/response";
-import { UnauthorizedError } from "../utils/exceptions";
-import { User } from "../database/models/user.model";
-import { UserAuth } from "../database/models/userAuth.model";
-import { generateAccessToken } from "../utils/auth/accessToken";
-import { verifyRefreshToken } from "../utils/auth/refreshToken";
+import { exceptionResponse, response } from "../../api/response";
+import TokenHelpers from "./helpers.utils";
+import { generateAccessToken } from "../../utils/auth/accessToken";
+import { UnauthorizedError } from "../../utils/exceptions";
+import { verifyRefreshToken } from "../../utils/auth/refreshToken";
+import { UserAuth } from "../../database/models/userAuth.model";
+import { User } from "../../database/models/user.model";
 
 export default class TokenController {
+  private helpers: TokenHelpers;
+
+  constructor() {
+    this.helpers = new TokenHelpers();
+  }
+
   public async refresh(req: Request, res: Response) {
     try {
       const { refresh_token } = req.body;
@@ -20,25 +27,25 @@ export default class TokenController {
         throw new UnauthorizedError("Invalid refresh token");
       }
 
-      const id = decoded?.id;
-      if (!id) {
-        throw new UnauthorizedError("Invalid refresh token ID");
-      }
+      const id = decoded.id;
 
       const userAuth = await UserAuth.findOne({ refresh_token }).exec();
       if (!userAuth) {
         throw new UnauthorizedError("Refresh token is incorrect or expired");
       }
 
-      const user = await User.findById(userAuth.user).select("email").exec();
+      const user = await User.findById(id).select("email").exec();
       if (!user) {
         throw new UnauthorizedError("User not found");
       }
 
-      const access_token = generateAccessToken({ id });
+      const access_token = generateAccessToken({
+        created: new Date(),
+        id: userAuth.user,
+      });
 
       return response(res, {
-        code: 200,
+        code: 201,
         success: true,
         message: "Refresh token is valid. Access token generated.",
         data: {
