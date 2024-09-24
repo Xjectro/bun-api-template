@@ -1,6 +1,9 @@
 import { User } from "../../database/models/user.model";
 import { Connection } from "../../database/models/connection.model";
-import { DuplicatedDataError, NotFoundError } from "../../utils/exceptions";
+import {
+  DuplicatedDataError,
+  NotFoundError,
+} from "../../api/commons/exceptions";
 import { updateStates } from "../../services/db.services";
 
 export default class UsersHelpers {

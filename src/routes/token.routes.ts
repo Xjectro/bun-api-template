@@ -1,6 +1,6 @@
 import { Router } from "express";
 import TokenController from "../controllers/token/index.ctrl";
-import validateBody, { tokenSchema } from "../validator";
+import validateBody, { tokenSchema } from "../api/transport/validator";
 
 class TokenRoutes {
   public router = Router();

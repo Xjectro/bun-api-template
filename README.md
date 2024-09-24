@@ -31,25 +31,26 @@ This project is an API template built using Express.js, MongoDB, Bunny, TypeScri
    bun install
    ```
 3. Create a `.env` file and add the necessary environment variables:
+
    ```env
    PORT=5000
    JWT_SECRET=D04rSbcNX5
-   
+
    MONGODB_HOST=127.0.0.1
    MONGODB_PORT=27017
    MONGODB_DB_NAME=server
-   
+
    EMAIL_USER=
    EMAIL_PASS=
-   
+
    NODE_ENV=test
    BASE_URL=http://localhost:5000
-   
+
    DISCORD_REDIRECT_URI=http://localhost:3000/callback/discord
    DISCORD_CLIENT_ID=
    DISCORD_CLIENT_SECRET=
    DISCORD_TOKEN=
-   
+
    BUNNY_ACCESS_KEY=
    BUNNY_STORAGE_NAME=
    BUNNY_HOST_NAME=
@@ -66,7 +67,8 @@ bun run dev
 ## 📂 Project Structure
 
 ```bash
-📦 express-api-template
+📦 server
+ ┣ 📂 node_modules
  ┣ 📂 public
  ┃ ┗ 📜 .gitkeep
  ┣ 📂 src
@@ -81,12 +83,13 @@ bun run dev
  ┃ ┣ 📂 validator
  ┃ ┣ 📜 index.ts
  ┃ ┗ 📜 server.ts
- ┣ 📂 test
- ┃ ┗ 📜 apis.test.ts
  ┣ 📂 templates
  ┃ ┣ 📂 css
  ┃ ┣ 📂 html
  ┃ ┗ 📂 scripts
+ ┣ 📂 test
+ ┃ ┗ 📜 apis.test.ts
+ ┣ 📂 uploads
  ┣ 📜 .env.example
  ┣ 📜 jest.config.js
  ┣ 📜 LICENSE
@@ -97,4 +100,3 @@ bun run dev
  ┣ 📜 README.md
  ┗ 📜 tsconfig.json
 ```
-

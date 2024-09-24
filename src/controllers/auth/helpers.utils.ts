@@ -1,4 +1,7 @@
-import { UnauthorizedError, DuplicatedDataError } from "../../utils/exceptions";
+import {
+  UnauthorizedError,
+  DuplicatedDataError,
+} from "../../api/commons/exceptions";
 import { User } from "../../database/models/user.model";
 import { UserAuth } from "../../database/models/userAuth.model";
 

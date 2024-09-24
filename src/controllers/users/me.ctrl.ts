@@ -1,5 +1,5 @@
 import { type Request, type Response } from "express";
-import { exceptionResponse, response } from "../../api/response";
+import { exceptionResponse, response } from "../../api/commons/response";
 import UsersHelpers from "./helpers.utils";
 
 export default class UsersController {

@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { auth } from "../middlewares/auth";
+import { auth } from "../middlewares/authenticate";
 import { upload } from "../middlewares/upload";
 import CdnController from "../controllers/cdn/index.ctrl";
 

@@ -1,4 +1,4 @@
-import { UnauthorizedError } from "../../../utils/exceptions";
+import { UnauthorizedError } from "../../../api/commons/exceptions";
 import {
   discord_getAccessToken,
   discord_getUserInfo,

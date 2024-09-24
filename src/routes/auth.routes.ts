@@ -1,7 +1,7 @@
 import { Router } from "express";
 import AuthController from "../controllers/auth/index.ctrl";
-import validateBody, { authSchema } from "../validator";
-import { auth } from "../middlewares/auth";
+import validateBody, { authSchema } from "../api/transport/validator";
+import { auth } from "../middlewares/authenticate";
 
 class AuthRoutes {
   public router = Router();

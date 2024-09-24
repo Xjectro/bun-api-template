@@ -1,11 +1,11 @@
 import { type Request, type Response } from "express";
-import { exceptionResponse, response } from "../../api/response";
+import { exceptionResponse, response } from "../../api/commons/response";
 import { createUser } from "../../services/db.services";
 import AuthHelpers from "./helpers.utils";
 import { generateAccessToken } from "../../utils/auth/accessToken";
-import { UnauthorizedError } from "../../utils/exceptions";
+import { UnauthorizedError } from "../../api/commons/exceptions";
 import { UserAuth } from "../../database/models/userAuth.model";
-import { sendEmail } from "../../utils/transport/email";
+import { sendEmail } from "../../api/transport/email";
 import { Transaction } from "../../database/models/transaction.model";
 import { generateCode } from "../../utils/auth/code";
 import { readFile } from "fs/promises";

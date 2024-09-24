@@ -1,8 +1,8 @@
 import { type Request, type Response } from "express";
-import { exceptionResponse, response } from "../../../api/response";
+import { exceptionResponse, response } from "../../../api/commons/response";
 import ConnectionsProviders from "./providers.utils";
 import { Connection } from "../../../database/models/connection.model";
-import { NotFoundError } from "../../../utils/exceptions";
+import { NotFoundError } from "../../../api/commons/exceptions";
 
 export default class UsersConnectionsController {
   private providers: ConnectionsProviders = new ConnectionsProviders();

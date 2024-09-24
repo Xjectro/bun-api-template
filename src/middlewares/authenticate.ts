@@ -3,8 +3,8 @@ import {
   NotFoundError,
   UnauthorizedError,
   ForbiddenAccessError,
-} from "../utils/exceptions";
-import { exceptionResponse } from "../api/response";
+} from "../api/commons/exceptions";
+import { exceptionResponse } from "../api/commons/response";
 import { verifyAccessToken } from "../utils/auth/accessToken";
 import { User } from "../database/models/user.model";
 import { UserAuth } from "../database/models/userAuth.model";
@@ -38,7 +38,7 @@ export const auth = async (req: Request, res: Response, next: NextFunction) => {
 
     const user = await User.findById(userAuth.user)
       .select(
-        "firstName lastName username avatarURL user_id description createdAt updatedAt",
+        "firstName lastName username avatarURL user_id description createdAt updatedAt bannerURL",
       )
       .exec();
 
@@ -46,8 +46,15 @@ export const auth = async (req: Request, res: Response, next: NextFunction) => {
       throw new UnauthorizedError("User details could not be found");
     }
 
-    const { user_id, firstName, lastName, username, avatarURL, description } =
-      user.toObject({ virtuals: true });
+    const {
+      user_id,
+      firstName,
+      lastName,
+      username,
+      avatarURL,
+      description,
+      bannerURL,
+    } = user.toObject({ virtuals: true });
 
     res.locals = {
       user: {
@@ -59,6 +66,7 @@ export const auth = async (req: Request, res: Response, next: NextFunction) => {
         avatarURL,
         description,
         role: userAuth.role,
+        bannerURL,
       },
     };
 

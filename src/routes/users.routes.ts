@@ -1,6 +1,6 @@
 import { Router } from "express";
-import { auth } from "../middlewares/auth";
-import validateBody, { userSchema } from "../validator";
+import { auth } from "../middlewares/authenticate";
+import validateBody, { userSchema } from "../api/transport/validator";
 import UsersMeController from "../controllers/users/me.ctrl";
 import UsersConnectionsController from "../controllers/users/connections/index.ctrl";
 

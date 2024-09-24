@@ -16,6 +16,7 @@ export interface UserType extends mongoose.Document {
   firstName: string;
   lastName: string;
   avatarURL: string;
+  bannerURL: string;
   isOnline: boolean;
   createdAt: Date;
   updatedAt: Date;
@@ -51,6 +52,10 @@ const userSchema: mongoose.Schema<UserType> = new Schema<UserType>(
     },
     avatarURL: {
       type: String,
+    },
+    bannerURL: {
+      type: String,
+      default: null,
     },
   },
   { timestamps: true, versionKey: false },
