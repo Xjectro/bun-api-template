@@ -36,27 +36,25 @@ This project is a modern API template built using Express.js, MongoDB, Bunny CDN
 3. Create a `.env` file and add the necessary environment variables:
 
    ```env
-   PORT=5000
-   JWT_SECRET=D04rSbcNX5
+PORT=5000
+JWT_SECRET=D04rS
 
-   MONGODB_HOST=127.0.0.1
-   MONGODB_PORT=27017
-   MONGODB_NAME=server
+MONGOOSE_URI=
 
-   EMAIL_USER=
-   EMAIL_PASS=
+NODEMAILER_USER=
+NODEMAILER_PASS=
 
-   NODE_ENV=test
-   BASE_URL=http://localhost:5000
+NODE_ENV=test
+BASE_URL=http://localhost:5000
 
-   DISCORD_REDIRECT_URI=http://localhost:3000/callback/discord
-   DISCORD_CLIENT_ID=
-   DISCORD_CLIENT_SECRET=
-   DISCORD_TOKEN=
+DISCORD_REDIRECT_URI=http://localhost:3000/callback/discord
+DISCORD_CLIENT_ID=
+DISCORD_CLIENT_SECRET=
+DISCORD_TOKEN=
 
-   BUNNY_ACCESS_KEY=
-   BUNNY_STORAGE_NAME=
-   BUNNY_HOST_NAME=
+BUNNY_ACCESS_KEY=
+BUNNY_STORAGE_NAME=
+BUNNY_HOST_NAME=storage.bunnycdn.com
    ```
 
 ## 🛠 Usage
@@ -77,8 +75,7 @@ bun run dist/index.js
 📦 bun-api-template
  ┣ 📂 node_modules
  ┣ 📂 src
- ┃ ┣ 📂 api          # API routes and logic
- ┃ ┣ 📂 constants     # App-wide constants
+ ┃ ┣ 📂 api           # API routes and logic
  ┃ ┣ 📂 controllers   # Business logic and controllers
  ┃ ┣ 📂 database      # Database connection and models
  ┃ ┣ 📂 middlewares   # Custom middleware functions

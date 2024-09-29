@@ -1,21 +1,20 @@
 import axios from 'axios';
 import fs from 'fs';
-import { config } from '../constants';
 
-const { hostName, accessKey, stroageName } = config.bunny;
+const { BUNNY_ACCESS_KEY,BUNNY_STORAGE_NAME,BUNNY_HOST_NAME } = process.env;
 
 export const uploadFile = async (file: any) => {
   const fileStream = fs.createReadStream(file.path);
   const uniqueFilename = `${Date.now()}-${file.filename}-${file.originalname}`;
 
-  const response = await axios.put(`https://${hostName}/${stroageName}/${uniqueFilename}`, fileStream, {
+  const response = await axios.put(`https://${BUNNY_HOST_NAME}/${BUNNY_STORAGE_NAME}/${uniqueFilename}`, fileStream, {
     headers: {
-      AccessKey: accessKey,
+      AccessKey: BUNNY_ACCESS_KEY,
     },
   });
 
   if (response.data) {
-    return `https://${stroageName}.b-cdn.net/${uniqueFilename}`;
+    return `https://${BUNNY_STORAGE_NAME}.b-cdn.net/${uniqueFilename}`;
   } else {
     return false;
   }

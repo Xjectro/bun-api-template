@@ -17,12 +17,18 @@ testEndpoint('get', '/api/users/me');
 testEndpoint('post', '/api/users/me/update');
 testEndpoint('get', '/api/users/me/connections');
 
+testEndpoint('post', '/api/users/connections/discord');
+testEndpoint('post', '/api/users/connections/disconnect');
+
 testEndpoint('post', '/api/auth/login');
 testEndpoint('post', '/api/auth/register');
 testEndpoint('post', '/api/auth/forgot-password');
 testEndpoint('post', '/api/auth/refresh-password');
-testEndpoint('post', '/api/auth/code');
 
-testEndpoint('get', '/api/token/refresh');
+testEndpoint('post', '/api/auth/tfa');
+testEndpoint('post', '/api/auth/tfa/verify');
 
-testEndpoint('post', '/api/users/connections/discord');
+testEndpoint('post', '/api/auth/modification/email');
+testEndpoint('post', '/api/auth/modification/password');
+
+testEndpoint('post', '/api/cdn/upload-file');

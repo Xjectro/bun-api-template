@@ -1,65 +1,65 @@
 import { type Request, type Response } from 'express';
 import { exceptionResponse, response } from '../../../api/commons/response';
 import { UnauthorizedError } from '../../../api/commons/exceptions';
-import { UserAuth } from '../../../database/models/userAuth.model';
+import { Auth } from '../../../database/models/auth.model';
 
 export default class AuthModificationController {
-  password = async (req: Request, res: Response) => {
+  email = async (req: Request, res: Response) => {
     try {
-      const { newPassword, currentPassword } = req.body;
+      const { newEmail } = req.body;
       const user = res.locals.user;
 
-      const userAuth = await UserAuth.findOne({ user: user._id }).exec();
+      const auth = await Auth.findOne({ user: user._id });
 
-      if (!userAuth) {
+      if (!auth) {
         throw new UnauthorizedError('User not found!');
       }
 
-      if (!(await userAuth.comparePassword(currentPassword))) {
-        throw new UnauthorizedError('Your current password is incorrect!');
+      const existing = await Auth.findOne({ email: newEmail }).exec();
+
+      if (existing) {
+        throw new UnauthorizedError('There is such an email!');
       }
 
-      if (await userAuth.comparePassword(newPassword)) {
-        throw new UnauthorizedError('Password is the same as before!');
-      }
-
-      userAuth.password = newPassword;
-      await userAuth.save();
+      auth.email = newEmail;
+      await auth.save();
 
       return response(res, {
         code: 201,
         success: true,
-        message: 'Password updated successfully!',
+        message: 'Email updated successfully!',
       });
     } catch (error: any) {
       return exceptionResponse(res, error);
     }
   };
 
-  email = async (req: Request, res: Response) => {
+  password = async (req: Request, res: Response) => {
     try {
-      const { newEmail } = req.body;
+      const { newPassword, currentPassword } = req.body;
       const user = res.locals.user;
 
-      const userAuth = await UserAuth.findOne({ user: user._id });
+      const auth = await Auth.findOne({ user: user._id }).exec();
 
-      if (!userAuth) {
+      if (!auth) {
         throw new UnauthorizedError('User not found!');
       }
 
-      const existing = await UserAuth.findOne({ email: newEmail }).exec();
-
-      if (existing) {
-        throw new UnauthorizedError('There is such an email!');
+      if (!(await auth.comparePassword(currentPassword))) {
+        throw new UnauthorizedError('Your current password is incorrect!');
       }
 
-      userAuth.email = newEmail;
-      await userAuth.save();
+      if (await auth.comparePassword(newPassword)) {
+        throw new UnauthorizedError('Password is the same as before!');
+      }
+
+      auth.password = newPassword;
+      await auth.save();
 
       return response(res, {
         code: 201,
         success: true,
-        message: 'Email updated successfully!',
+        message: 'Password updated successfully!',
       });
     } catch (error: any) {
       return exceptionResponse(res, error);

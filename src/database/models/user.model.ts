@@ -1,15 +1,10 @@
-import mongoose from 'mongoose';
-import uniqueValidator from 'mongoose-unique-validator';
+import mongoose from "mongoose";
 
 const Schema = mongoose.Schema;
 
-export enum UserRole {
-  ADMIN = 'ADMIN',
-  USER = 'USER',
-}
-
 export interface UserType extends mongoose.Document {
   _id: mongoose.Schema.Types.ObjectId;
+  auth: any;
   user_id: string;
   username: string;
   description: string;
@@ -17,50 +12,50 @@ export interface UserType extends mongoose.Document {
   lastName: string;
   avatarURL: string;
   bannerURL: string;
-  isOnline: boolean;
   createdAt: Date;
   updatedAt: Date;
 }
 
 const userSchema: mongoose.Schema<UserType> = new Schema<UserType>(
   {
+    auth: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "auth",
+      required: false,
+    },
     user_id: {
       type: String,
       unique: true,
-      required: [true, 'User ID is required'],
+      required: true,
     },
     username: {
       type: String,
-      required: [true, 'Username is required'],
+      required: true,
     },
     description: {
       type: String,
       required: false,
-      default: 'hello!',
+      default: "test",
     },
     firstName: {
       type: String,
-      required: [true, 'First name is required'],
+      required: true,
     },
     lastName: {
       type: String,
-      required: [true, 'Last name is required'],
-    },
-    isOnline: {
-      type: Boolean,
-      default: false,
+      required: true,
     },
     avatarURL: {
       type: String,
+      required: true,
     },
     bannerURL: {
       type: String,
+      required: false,
       default: null,
     },
   },
   { timestamps: true, versionKey: false },
 );
 
-userSchema.plugin(uniqueValidator, { message: '{PATH} should be unique.' });
-
-export const User = mongoose.model<UserType>('user', userSchema);
+export const User = mongoose.model<UserType>("user", userSchema);

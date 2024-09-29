@@ -1,16 +1,19 @@
 import { type Request, type Response } from 'express';
 import { exceptionResponse, response } from '../../api/commons/response';
-import { checkTransaction, createTransaction, createUser } from '../../services/db.services';
+import { createUser } from '../../services/db.service';
 import AuthHelpers from './helpers.utils';
-import { generateJwt } from '../../utils/auth/jwt';
+import { generateJWT } from '../../utils/modules/jwt';
 import { UnauthorizedError, DuplicatedDataError } from '../../api/commons/exceptions';
-import { UserAuth } from '../../database/models/userAuth.model';
-import { sendEmail } from '../../api/transport/email';
+import { Auth } from '../../database/models/auth.model';
+import { sendEmail } from '../../services/transport.service';
 import { User } from '../../database/models/user.model';
 import { createHtmlTemplate } from '../../utils/helpers';
+import { Tfa } from '../../database/models/tfa.model';
+import AuthTfaController from './tfa/index.ctrl';
 
 export default class AuthController {
   private helpers: AuthHelpers;
+  tfa = new AuthTfaController()
 
   constructor() {
     this.helpers = new AuthHelpers();
@@ -19,33 +22,33 @@ export default class AuthController {
   login = async (req: Request, res: Response) => {
     try {
       const { email, password } = req.body;
-      const userAuth = await UserAuth.findOne({ email }).populate('user').exec();
+      const auth = await Auth.findOne({ email }).populate('user').exec();
 
-      if (!userAuth || !(await userAuth.comparePassword(password))) {
+      if (!auth || !(await auth.comparePassword(password))) {
         throw new UnauthorizedError('Email or password is incorrect!');
       }
 
       let data: any = {};
-      if (userAuth.tfa) {
-        const { code } = await createTransaction({ user: userAuth.user._id, action: 'login' });
+      if (auth.tfa) {
+        const { usage_code } = await Tfa.createTfa({ user: auth.user._id, interaction: 'login' });
 
         const html = await createHtmlTemplate('auth-login', {
-          code,
+          code: usage_code,
         });
 
         await sendEmail({
           to: email,
-          subject: `${userAuth.user.firstName} Your login code`,
+          subject: `${auth.user.firstName} Your login code`,
           html,
         });
       } else {
-        data.access_token = generateJwt(
+        data.access_token = generateJWT(
           {
-            id: userAuth.user,
+            id: auth.user._id,
           },
           30 * 24 * 60 * 60,
         );
-        data.refresh_token = userAuth.refresh_token;
+        data.refresh_token = auth.refresh_token;
       }
 
       return response(res, {
@@ -68,7 +71,7 @@ export default class AuthController {
         throw new DuplicatedDataError('User already exists!');
       }
 
-      const userAuth = await UserAuth.findOne({ email }).exec();
+      const userAuth = await Auth.findOne({ email }).exec();
       if (userAuth) {
         throw new DuplicatedDataError('User already exists!');
       }
@@ -89,20 +92,19 @@ export default class AuthController {
     try {
       const { email, ref } = req.body;
 
-      const userAuth = await UserAuth.findOne({ email }).exec();
-      if (!userAuth) {
+      const auth = await Auth.findOne({ email }).exec();
+      if (!auth) {
         throw new UnauthorizedError('Email is incorrect!');
       }
 
-      const { ref: href } = (await createTransaction({
-        user: userAuth.user,
-        action: 'forgot_password',
-        ref,
+      const { usage_code } = await Tfa.createTfa({
+        user: auth.user._id,
+        interaction: 'forgot_password',
         format: 'jwt',
-      })) as { code: string; ref: string };
+      })
 
-      const html = await createHtmlTemplate('auth-forgotPassword', {
-        href,
+      const html = await createHtmlTemplate('auth-forgot_password', {
+        href: ref + `${usage_code}`,
       });
 
       await sendEmail({
@@ -126,77 +128,23 @@ export default class AuthController {
       const { newPassword } = req.body;
       const user = res.locals.user;
 
-      const userAuth = await UserAuth.findOne({ user: user._id }).exec();
+      const auth = await Auth.findOne({ user: user._id }).exec();
 
-      if (!userAuth) {
+      if (!auth) {
         throw new UnauthorizedError('User not found!');
       }
-      if (await userAuth.comparePassword(newPassword)) {
+
+      if (await auth.comparePassword(newPassword)) {
         throw new UnauthorizedError('Password is the same as before!');
       }
 
-      userAuth.password = newPassword;
-      await userAuth.save();
+      auth.password = newPassword;
+      await auth.save();
 
       return response(res, {
         code: 201,
         success: true,
         message: 'Password updated successfully!',
-      });
-    } catch (error: any) {
-      return exceptionResponse(res, error);
-    }
-  };
-
-  code = async (req: Request, res: Response) => {
-    try {
-      const { code, action } = req.body;
-
-      const transaction = await checkTransaction({ code, action });
-
-      const data: any = {
-        expiresAt: transaction.expiresAt,
-        access_token: generateJwt(
-          {
-            id: transaction.user._id,
-          },
-          30 * 24 * 60 * 60,
-        ),
-      };
-
-      if (action === 'login') {
-        const userAuth = await UserAuth.findOne({ user: transaction.user._id });
-        data.refresh_token = userAuth?.refresh_token;
-      }
-
-      return response(res, {
-        code: 201,
-        success: true,
-        message: 'Code is valid. You can proceed with the reset.',
-        data,
-      });
-    } catch (error: any) {
-      return exceptionResponse(res, error);
-    }
-  };
-
-  twoFactor = async (req: Request, res: Response) => {
-    try {
-      const user = res.locals.user;
-      const { enabled } = req.body;
-
-      const userAuth = await UserAuth.findOne({ user: user._id });
-
-      if (!userAuth) return;
-
-      userAuth.tfa = enabled;
-
-      await userAuth.save();
-
-      return response(res, {
-        code: 201,
-        success: true,
-        message: 'Successfully update two factor.',
       });
     } catch (error: any) {
       return exceptionResponse(res, error);

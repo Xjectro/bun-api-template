@@ -1,40 +1,36 @@
+import { verifyJWT } from '../utils/modules/jwt';
+import { User } from '../database/models/user.model';
+import { exceptionResponse } from '../api/commons/response';
 import { type Request, type Response, type NextFunction } from 'express';
 import { NotFoundError, UnauthorizedError, ForbiddenAccessError } from '../api/commons/exceptions';
-import { exceptionResponse } from '../api/commons/response';
-import { verifyJwt } from '../utils/auth/jwt';
-import { UserAuth } from '../database/models/userAuth.model';
 
 interface CustomRequest extends Request {
   user?: any;
 }
 
 export const auth = async (req: Request, res: Response, next: NextFunction) => {
-  const authHeader = req.headers['authorization'] as string;
-  const token = authHeader?.replace('Bearer', '').trim();
+  const token = req.headers['authorization']?.replace('Bearer', '').trim();
 
   try {
     if (!token) {
-      throw new NotFoundError('A token is required for authentication');
+      throw new NotFoundError('Token is required for authentication');
     }
 
-    const decoded = verifyJwt(token);
+    const decoded = verifyJWT(token);
 
     if (!decoded) {
-      throw new UnauthorizedError('Your token does not match our credentials');
+      throw new UnauthorizedError('Token does not match credentials');
     }
 
-    const userAuth = await UserAuth.findOne({ user: decoded.id }).populate('user').select('email role user tfa').exec();
+    const user = await User.findById(decoded.id).populate("auth");
 
-    if (!userAuth) {
-      throw new UnauthorizedError('Your token does not match our credentials');
+    if (!user) {
+      throw new UnauthorizedError('Token does not match credentials 2');
     }
 
     res.locals = {
       user: {
-        ...userAuth.user.toObject({ virtuals: true }),
-        tfa: userAuth.tfa,
-        email: userAuth.email,
-        role: userAuth.role,
+        ...user.toObject({ virtuals: true }),
       },
     };
 
@@ -45,11 +41,11 @@ export const auth = async (req: Request, res: Response, next: NextFunction) => {
 };
 
 export const verifyRole = (roles: string[]) => {
-  return (req: CustomRequest, res: Response, next: NextFunction) => {
+  return (_: CustomRequest, res: Response, next: NextFunction) => {
     try {
       const user = res.locals.user;
 
-      if (user && roles.includes(user.role)) {
+      if (user && roles.includes(user.auth.role)) {
         return next();
       }
 

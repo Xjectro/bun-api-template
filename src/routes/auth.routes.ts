@@ -1,8 +1,9 @@
 import { Router } from 'express';
 import AuthController from '../controllers/auth/index.ctrl';
 import AuthModificationController from '../controllers/auth/modification/index.ctrl';
-import validateBody, { authSchema } from '../api/transport/validator';
+import { validateBody } from '../middlewares/validate';
 import { auth } from '../middlewares/authenticate';
+import * as schema from "../controllers/auth/schema"
 
 class AuthRoutes {
   public router = Router();
@@ -10,44 +11,43 @@ class AuthRoutes {
     ...new AuthController(),
     modification: new AuthModificationController(),
   };
-  private schema = authSchema;
 
   constructor() {
-    this.router.post('/login', validateBody(this.schema.loginSchema), this.controller.login);
-    this.router.post('/register', validateBody(this.schema.registerSchema), this.controller.register);
+    this.router.post('/login', validateBody(schema.login), this.controller.login);
+    this.router.post('/register', validateBody(schema.register), this.controller.register);
     this.router.post(
       '/forgot-password',
-      validateBody(this.schema.forgotPasswordSchema),
+      validateBody(schema.forgot_password),
       this.controller.forgotPassword,
     );
     this.router.post(
       '/refresh-password',
-      validateBody(this.schema.refreshPasswordSchema),
+      validateBody(schema.refresh_password),
       auth,
       this.controller.refreshPassword,
     );
-    this.router.post('/code', validateBody(this.schema.codeSchema), this.controller.code);
 
     /**
      * Modification
      */
     this.router.post(
-      '/modification/password',
-      validateBody(this.schema.modificationPassword),
-      auth,
-      this.controller.modification.password,
-    );
-    this.router.post(
       '/modification/email',
-      validateBody(this.schema.modificationEmail),
+      validateBody(schema.modification.email),
       auth,
       this.controller.modification.email,
+    );
+    this.router.post(
+      '/modification/password',
+      validateBody(schema.modification.password),
+      auth,
+      this.controller.modification.password,
     );
 
     /**
      * Two Factor
      */
-    this.router.post('/two-factor', validateBody(this.schema.twoFactorSchema), auth, this.controller.twoFactor);
+    this.router.post('/tfa', validateBody(schema.tfa.index), auth, this.controller.tfa.index);
+    this.router.post('/tfa/verify', validateBody(schema.tfa.verify), this.controller.tfa.verify);
   }
 }
 

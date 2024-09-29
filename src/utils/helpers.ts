@@ -1,8 +1,8 @@
 import { readFile } from 'fs/promises';
 import path from 'path';
 
-export function createAvatarURL(firstName?: string, lastName?: string): string {
-  const name = [firstName, lastName].filter(Boolean).join(' ');
+export function createAvatarURL(names: string[]): string {
+  const name = names.filter(Boolean).join(" ");
   return `https://ui-avatars.com/api/?size=128&bold=true&uppercase=true&background=ffffff&color=000000&name=${encodeURIComponent(name)}`;
 }
 

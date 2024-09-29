@@ -2,7 +2,7 @@ import { type Request, type Response } from 'express';
 import { exceptionResponse, response } from '../../../api/commons/response';
 import { DuplicatedDataError, NotFoundError } from '../../../api/commons/exceptions';
 import { User } from '../../../database/models/user.model';
-import { updateStates } from '../../../services/db.services';
+import { updateStates } from '../../../services/db.service';
 import { Connection } from '../../../database/models/connection.model';
 
 export default class UsersMeController {

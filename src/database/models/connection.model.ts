@@ -1,4 +1,4 @@
-import mongoose from 'mongoose';
+import mongoose from "mongoose";
 
 const Schema = mongoose.Schema;
 
@@ -14,17 +14,15 @@ export interface ConnectionType extends mongoose.Document {
   };
 }
 
-const dataSchema = new Schema({
-  id: String,
-  name: String,
-  username: String,
-});
+interface ConnectionModel extends mongoose.Model<ConnectionType> {
+  save({ ...state }: {}): Promise<boolean>
+}
 
 const connectionSchema = new Schema<ConnectionType>(
   {
     user: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: 'user',
+      ref: "user",
       required: true,
     },
     access_token: {
@@ -40,11 +38,26 @@ const connectionSchema = new Schema<ConnectionType>(
       required: true,
     },
     data: {
-      type: dataSchema,
+      type: {
+        id: String,
+        name: String,
+        username: String,
+      },
       required: true,
     },
   },
-  { timestamps: true, versionKey: false },
+  { timestamps: true, versionKey: false, _id: false },
 );
 
-export const Connection = mongoose.model<ConnectionType>('connection', connectionSchema);
+connectionSchema.statics.save = async function saveConnection({ ...state }: ConnectionType) {
+  return await Connection.updateOne(
+    { user: state.user, type: state.type },
+    { $set: state },
+    { upsert: true },
+  );
+}
+
+export const Connection = mongoose.model<ConnectionType, ConnectionModel>(
+  "connection",
+  connectionSchema,
+);
