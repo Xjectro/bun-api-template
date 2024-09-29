@@ -1,21 +1,22 @@
-import mongoose from "mongoose";
-import bcrypt from "bcrypt";
-import uniqueValidator from "mongoose-unique-validator";
+import mongoose from 'mongoose';
+import bcrypt from 'bcrypt';
+import uniqueValidator from 'mongoose-unique-validator';
 
 const Schema = mongoose.Schema;
 
 export enum UserRole {
-  ADMIN = "ADMIN",
-  USER = "USER",
+  ADMIN = 'ADMIN',
+  USER = 'USER',
 }
 
 export interface UserAuthType extends mongoose.Document {
   _id: mongoose.Schema.Types.ObjectId;
-  user: mongoose.Schema.Types.ObjectId;
+  user: any;
   refresh_token: string;
   email: string;
   password: string;
   role: UserRole;
+  tfa: boolean;
   comparePassword: (password: string) => Promise<boolean>;
 }
 
@@ -23,18 +24,18 @@ const userAuthSchema: mongoose.Schema<UserAuthType> = new Schema<UserAuthType>(
   {
     user: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "user",
-      required: [true, "User ID is required"],
+      ref: 'user',
+      required: [true, 'User is required'],
     },
     refresh_token: {
       type: String,
-      required: [true, "Refresh token is required"],
+      required: [true, 'Refresh token is required'],
     },
     email: {
       type: String,
       unique: true,
-      required: [true, "Email is required"],
-      match: [/.+@.+\..+/, "Please enter a valid email address"],
+      required: [true, 'Email is required'],
+      match: [/.+@.+\..+/, 'Please enter a valid email address'],
     },
     role: {
       type: String,
@@ -43,16 +44,20 @@ const userAuthSchema: mongoose.Schema<UserAuthType> = new Schema<UserAuthType>(
     },
     password: {
       type: String,
-      required: [true, "Password is required"],
+      required: [true, 'Password is required'],
+    },
+    tfa: {
+      type: Boolean,
+      default: false,
     },
   },
   { timestamps: true, versionKey: false },
 );
 
-userAuthSchema.plugin(uniqueValidator, { message: "{PATH} should be unique." });
+userAuthSchema.plugin(uniqueValidator, { message: '{PATH} should be unique.' });
 
-userAuthSchema.pre<UserAuthType>("save", async function (next) {
-  if (!this.isModified("password")) return next();
+userAuthSchema.pre<UserAuthType>('save', async function (next) {
+  if (!this.isModified('password')) return next();
 
   try {
     const salt = await bcrypt.genSalt(10);
@@ -64,9 +69,7 @@ userAuthSchema.pre<UserAuthType>("save", async function (next) {
   next();
 });
 
-userAuthSchema.methods.comparePassword = async function (
-  password: string,
-): Promise<boolean> {
+userAuthSchema.methods.comparePassword = async function (password: string): Promise<boolean> {
   try {
     return await bcrypt.compare(password, this.password);
   } catch {
@@ -74,7 +77,4 @@ userAuthSchema.methods.comparePassword = async function (
   }
 };
 
-export const UserAuth = mongoose.model<UserAuthType>(
-  "userAuth",
-  userAuthSchema,
-);
+export const UserAuth = mongoose.model<UserAuthType>('userAuth', userAuthSchema);

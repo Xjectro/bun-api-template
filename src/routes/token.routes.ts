@@ -1,6 +1,6 @@
-import { Router } from "express";
-import TokenController from "../controllers/token/index.ctrl";
-import validateBody, { tokenSchema } from "../api/transport/validator";
+import { Router } from 'express';
+import TokenController from '../controllers/token/index.ctrl';
+import validateBody, { tokenSchema } from '../api/transport/validator';
 
 class TokenRoutes {
   public router = Router();
@@ -8,11 +8,7 @@ class TokenRoutes {
   private schema = tokenSchema;
 
   constructor() {
-    this.router.post(
-      "/refresh",
-      validateBody(this.schema.refreshSchema),
-      this.controller.refresh,
-    );
+    this.router.post('/refresh', validateBody(this.schema.refreshSchema), this.controller.refresh);
   }
 }
 

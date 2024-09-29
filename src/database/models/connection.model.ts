@@ -1,4 +1,4 @@
-import mongoose from "mongoose";
+import mongoose from 'mongoose';
 
 const Schema = mongoose.Schema;
 
@@ -24,7 +24,7 @@ const connectionSchema = new Schema<ConnectionType>(
   {
     user: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "user",
+      ref: 'user',
       required: true,
     },
     access_token: {
@@ -47,7 +47,4 @@ const connectionSchema = new Schema<ConnectionType>(
   { timestamps: true, versionKey: false },
 );
 
-export const Connection = mongoose.model<ConnectionType>(
-  "connection",
-  connectionSchema,
-);
+export const Connection = mongoose.model<ConnectionType>('connection', connectionSchema);

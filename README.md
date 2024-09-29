@@ -1,24 +1,27 @@
-# 🚀 Server
+# 🚀 Bun Api Template
 
-This project is an API template built using Express.js, MongoDB, Bunny, TypeScript, Morgan, HTTP, express-rate-limit, body-parser, Multer, Zod, nodemailer, and jsonwebtoken.
+This project is a modern API template built using Express.js, MongoDB, Bunny CDN, TypeScript, and other robust technologies. It is designed to help you quickly set up a scalable and secure API with various essential features such as rate limiting, authentication, and email handling.
 
 ## 📋 Table of Contents
 
-- [Features](#features)
-- [Installation](#installation)
-- [Usage](#usage)
-- [Project Structure](#project-structure)
+- [✨ Features](#-features)
+- [⚙️ Installation](#%EF%B8%8F-installation)
+- [🛠 Usage](#-usage)
+- [📂 Project Structure](#-project-structure)
 
 ## ✨ Features
 
-- Server creation with Express.js
-- Data storage with MongoDB
-- Type safety with TypeScript
-- HTTP request logging with Morgan
-- Rate limiting with express-rate-limit
-- Body parsing with body-parser
-- Input validation with Zod
-- Authentication with jsonwebtoken
+- **Server creation** with Express.js
+- **MongoDB** for scalable data storage
+- **TypeScript** for type safety
+- **Morgan** for HTTP request logging
+- **express-rate-limit** for rate limiting
+- **body-parser** for body parsing
+- **Multer** for file uploads
+- **Zod** for input validation
+- **jsonwebtoken** for authentication
+- **Nodemailer** for email integration
+- **Bunny CDN** for media content delivery
 
 ## ⚙️ Installation
 
@@ -38,7 +41,7 @@ This project is an API template built using Express.js, MongoDB, Bunny, TypeScri
 
    MONGODB_HOST=127.0.0.1
    MONGODB_PORT=27017
-   MONGODB_DB_NAME=server
+   MONGODB_NAME=server
 
    EMAIL_USER=
    EMAIL_PASS=
@@ -58,45 +61,46 @@ This project is an API template built using Express.js, MongoDB, Bunny, TypeScri
 
 ## 🛠 Usage
 
-To start the server:
-
+To start the server in development mode:
 ```bash
 bun run dev
+```
+To build and run the project in production:
+```bash
+bun run build
+bun run dist/index.js
 ```
 
 ## 📂 Project Structure
 
 ```bash
-📦 server
+📦 bun-api-template
  ┣ 📂 node_modules
- ┣ 📂 public
- ┃ ┗ 📜 .gitkeep
  ┣ 📂 src
- ┃ ┣ 📂 api
- ┃ ┣ 📂 constants
- ┃ ┣ 📂 controllers
- ┃ ┣ 📂 database
- ┃ ┣ 📂 middlewares
- ┃ ┣ 📂 routes
- ┃ ┣ 📂 services
- ┃ ┣ 📂 utils
- ┃ ┣ 📂 validator
- ┃ ┣ 📜 index.ts
- ┃ ┗ 📜 server.ts
- ┣ 📂 templates
+ ┃ ┣ 📂 api          # API routes and logic
+ ┃ ┣ 📂 constants     # App-wide constants
+ ┃ ┣ 📂 controllers   # Business logic and controllers
+ ┃ ┣ 📂 database      # Database connection and models
+ ┃ ┣ 📂 middlewares   # Custom middleware functions
+ ┃ ┣ 📂 routes        # Route definitions
+ ┃ ┣ 📂 services      # Services and utility functions
+ ┃ ┣ 📂 utils         # Helper utilities
+ ┃ ┣ 📜 index.ts      # App entry point
+ ┃ ┗ 📜 server.ts     # Server configuration
+ ┣ 📂 templates       # Static templates (HTML, CSS, JavaScript)
  ┃ ┣ 📂 css
  ┃ ┣ 📂 html
  ┃ ┗ 📂 scripts
- ┣ 📂 test
- ┃ ┗ 📜 apis.test.ts
- ┣ 📂 uploads
- ┣ 📜 .env.example
- ┣ 📜 jest.config.js
- ┣ 📜 LICENSE
- ┣ 📜 nodemon.json
- ┣ 📜 .gitignore
- ┣ 📜 package.json
- ┣ 📜 bun.lockb
- ┣ 📜 README.md
- ┗ 📜 tsconfig.json
+ ┣ 📂 test            # Unit and integration tests
+ ┃ ┗ 📜 apis.test.ts  # API test cases
+ ┣ 📂 uploads         # File uploads directory
+ ┣ 📜 .env.example    # Example environment variables
+ ┣ 📜 jest.config.js  # Jest configuration
+ ┣ 📜 LICENSE         # License file
+ ┣ 📜 nodemon.json    # Nodemon configuration
+ ┣ 📜 .gitignore      # Git ignore file
+ ┣ 📜 package.json    # Project metadata
+ ┣ 📜 bun.lockb       # Bun lock file for dependencies
+ ┣ 📜 README.md       # Project documentation
+ ┗ 📜 tsconfig.json   # TypeScript configuration
 ```

@@ -1,4 +1,4 @@
-import { type Response } from "express";
+import { type Response } from 'express';
 
 type ResponseDTO = {
   code: number;
@@ -10,8 +10,8 @@ type ResponseDTO = {
 const response = (res: Response, data: ResponseDTO) => {
   return res.status(data.code).json({
     success: data.success,
-    message: data.message || "",
-    data: data.data || "",
+    message: data.message || '',
+    data: data.data || '',
   });
 };
 
@@ -20,13 +20,13 @@ const exceptionResponse = (res: Response, error: any) => {
 
   let statusCode = 500;
 
-  if (typeof error.code === "number") {
+  if (typeof error.code === 'number') {
     statusCode = error.code;
   } else if (error.response && error.response.status) {
     statusCode = error.response.status;
-  } else if (error.code === "ERR_BAD_REQUEST") {
+  } else if (error.code === 'ERR_BAD_REQUEST') {
     statusCode = 400;
-  } else if (error.code === "ERR_CONFLICT") {
+  } else if (error.code === 'ERR_CONFLICT') {
     statusCode = 401;
   }
 

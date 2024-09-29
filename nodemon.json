@@ -1,10 +1,6 @@
 {
-    "watch": [
-        "src"
-    ],
-    "ext": "ts",
-    "ignore": [
-        "dist"
-    ],
-    "exec": "bun run src/index.ts"
+  "watch": ["src"],
+  "ext": "ts",
+  "ignore": ["dist"],
+  "exec": "bun run ./src/index"
 }

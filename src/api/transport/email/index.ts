@@ -1,23 +1,15 @@
-import nodemailer, { type Transporter } from "nodemailer";
-import { config } from "../../../constants";
+import nodemailer, { type Transporter } from 'nodemailer';
+import { config } from '../../../constants';
 
 const transporter: Transporter = nodemailer.createTransport({
-  service: "Gmail",
+  service: 'Gmail',
   auth: {
     user: config.email.user,
     pass: config.email.pass,
   },
 });
 
-export async function sendEmail({
-  to,
-  subject,
-  html,
-}: {
-  to: string;
-  subject: string;
-  html: string;
-}): Promise<void> {
+export async function sendEmail({ to, subject, html }: { to: string; subject: string; html: string }): Promise<void> {
   const mailOptions = {
     from: config.email.user,
     to,

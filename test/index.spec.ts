@@ -5,8 +5,7 @@ const testEndpoint = (method: 'get' | 'post', endpoint: string) => {
   const httpMethod = method.toUpperCase();
   describe(`${httpMethod} ${endpoint}`, () => {
     it('should make a request successfully', async () => {
-      const response = await request(app)[method](endpoint)
-        .set('Accept', 'application/json');
+      const response = await request(app)[method](endpoint).set('Accept', 'application/json');
 
       expect(response.status).toBeGreaterThanOrEqual(200);
       expect(response.status).toBeLessThan(500);

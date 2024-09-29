@@ -5,11 +5,8 @@
   "scripts": {
     "start": "bun run build && bun run dist/index.js",
     "dev": "nodemon",
-    "format": "prettier --write src/",
-    "build": "tsc -p tsconfig.json",
-    "build:prod": "tsc -p tsconfig.prod.json",
-    "test": "jest",
-    "test:watch": "jest --watch"
+    "format": "prettier --write .",
+    "test": "jest"
   },
   "devDependencies": {
     "@tsconfig/recommended": "^1.0.7",
@@ -27,7 +24,6 @@
     "@types/prettier": "^3.0.0",
     "@types/supertest": "^6.0.2",
     "@types/uuid": "^10.0.0",
-    "nodemon": "^3.1.4",
     "prettier": "^3.3.3"
   },
   "peerDependencies": {
@@ -42,6 +38,7 @@
     "cors": "^2.8.5",
     "discord.js": "^14.15.3",
     "dotenv": "^16.4.5",
+    "eslint": "^9.11.1",
     "express": "^4.19.2",
     "express-rate-limit": "^7.4.0",
     "helmet": "^7.1.0",

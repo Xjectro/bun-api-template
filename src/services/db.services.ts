@@ -1,16 +1,16 @@
-import mongoose from "mongoose";
-import { User, UserType } from "../database/models/user.model";
-import { UserAuth, UserAuthType } from "../database/models/userAuth.model";
-import { generateRefreshToken } from "../utils/auth/refreshToken";
-import { createAvatarURL } from "../utils/helpers";
-import { v4 as uuidV4 } from "uuid";
-import { Connection } from "../database/models/connection.model";
+import mongoose from 'mongoose';
+import { User, UserType } from '../database/models/user.model';
+import { UserAuth, UserAuthType } from '../database/models/userAuth.model';
+import { createAvatarURL } from '../utils/helpers';
+import { v4 as uuidV4 } from 'uuid';
+import { Connection } from '../database/models/connection.model';
+import { Transaction } from '../database/models/transaction.model';
+import { UnauthorizedError } from '../api/commons/exceptions';
+import { generateCode } from '../utils/auth/crypto';
+import { generateJwt } from '../utils/auth/jwt';
 
 export async function createUser(
-  userData: Partial<
-    Pick<UserType, "firstName" | "lastName" | "username"> &
-      Pick<UserAuthType, "email" | "password">
-  >,
+  userData: Partial<Pick<UserType, 'firstName' | 'lastName' | 'username'> & Pick<UserAuthType, 'email' | 'password'>>,
 ): Promise<mongoose.Types.ObjectId | any> {
   const id = uuidV4();
   const avatarURL = createAvatarURL(userData.firstName, userData.lastName);
@@ -23,7 +23,7 @@ export async function createUser(
     avatarURL,
   });
 
-  const refresh_token = generateRefreshToken({ id: user._id });
+  const refresh_token = generateJwt({ id: user._id }, 315360000);
 
   await user.save();
 
@@ -32,7 +32,7 @@ export async function createUser(
     email: userData.email,
     password: userData.password,
     refresh_token,
-    role: "USER",
+    role: 'USER',
   });
 
   await userAuth.save();
@@ -57,11 +57,7 @@ export async function saveConnection({
     data,
   };
 
-  return await Connection.updateOne(
-    { user, type },
-    { $set: updateData },
-    { upsert: true },
-  );
+  return await Connection.updateOne({ user, type }, { $set: updateData }, { upsert: true });
 }
 
 export const updateStates = (params: Record<string, any>) => {
@@ -73,3 +69,51 @@ export const updateStates = (params: Record<string, any>) => {
     {} as Record<string, any>,
   );
 };
+
+export async function checkTransaction({ code, action }: { code: string; action: string }) {
+  const transaction = await Transaction.findOne({ code }).populate('user');
+
+  if (!transaction?.user) {
+    throw new UnauthorizedError('Code is incorrect!');
+  }
+
+  const currentTime = new Date();
+  if (transaction.action !== action || transaction.expiresAt <= currentTime) {
+    throw new UnauthorizedError('Code is expired or action does not match!');
+  }
+
+  return transaction;
+}
+
+export async function createTransaction({
+  user,
+  action,
+  ref,
+  format,
+}: {
+  user: string;
+  action: string;
+  ref?: string;
+  format?: 'jwt';
+}) {
+  let code = '';
+  const expiresAt = new Date(Date.now() + 180 * 1000);
+
+  if (format == 'jwt') {
+    code = generateJwt({ user, action, ref }, 180);
+  } else {
+    code = generateCode({ length: 5 });
+  }
+
+  ref = ref?.replace('[code]', code);
+
+  await Transaction.create({
+    user,
+    action,
+    code,
+    ref,
+    expiresAt,
+  });
+
+  return { code, ref, user, action };
+}

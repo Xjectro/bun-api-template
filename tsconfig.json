@@ -1,8 +1,19 @@
 {
-  "extends": "./tsconfig.base.json",
   "compilerOptions": {
     "outDir": "./dist",
-    "sourceMap": false
+    "sourceMap": false,
+    "module": "NodeNext",
+    "target": "ES6",
+    "rootDir": "./src",
+    "declaration": true,
+    "declarationMap": true,
+    "strict": true,
+    "esModuleInterop": true,
+    "resolveJsonModule": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "isolatedModules": true,
+    "types": ["bun-types", "jest"]
   },
   "include": ["src/**/*"]
 }

@@ -1,26 +1,19 @@
-import { UnauthorizedError } from "../../../api/commons/exceptions";
-import {
-  discord_getAccessToken,
-  discord_getUserInfo,
-} from "../../../services/api.services";
-import { saveConnection } from "../../../services/db.services";
+import { UnauthorizedError } from '../../../api/commons/exceptions';
+import { discord_getAccessToken, discord_getUserInfo } from '../../../services/api.services';
+import { saveConnection } from '../../../services/db.services';
 
 export default class ConnectionsHelpers {
   async discord(_id: string, code: string) {
     const response = await discord_getAccessToken(code);
 
-    if (!response?.data?.access_token)
-      throw new UnauthorizedError("Error connecting to Discord");
+    if (!response?.data?.access_token) throw new UnauthorizedError('Error connecting to Discord');
 
-    const userInfo = await discord_getUserInfo(
-      `Bearer ${response.data.access_token} `,
-    );
+    const userInfo = await discord_getUserInfo(`Bearer ${response.data.access_token} `);
 
-    if (!userInfo.data)
-      throw new UnauthorizedError("Error connecting to Discord 2");
+    if (!userInfo.data) throw new UnauthorizedError('Error connecting to Discord 2');
 
     await saveConnection({
-      type: "discord",
+      type: 'discord',
       user: _id,
       data: userInfo.data,
       tokens: {

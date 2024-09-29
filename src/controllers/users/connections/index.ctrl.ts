@@ -1,8 +1,8 @@
-import { type Request, type Response } from "express";
-import { exceptionResponse, response } from "../../../api/commons/response";
-import ConnectionsProviders from "./providers.utils";
-import { Connection } from "../../../database/models/connection.model";
-import { NotFoundError } from "../../../api/commons/exceptions";
+import { type Request, type Response } from 'express';
+import { exceptionResponse, response } from '../../../api/commons/response';
+import ConnectionsProviders from './providers.utils';
+import { Connection } from '../../../database/models/connection.model';
+import { NotFoundError } from '../../../api/commons/exceptions';
 
 export default class UsersConnectionsController {
   private providers: ConnectionsProviders = new ConnectionsProviders();
@@ -16,7 +16,7 @@ export default class UsersConnectionsController {
       return response(res, {
         code: 201,
         success: true,
-        message: "Successfully connected to Discord",
+        message: 'Successfully connected to Discord',
         data,
       });
     } catch (error: any) {
@@ -40,7 +40,7 @@ export default class UsersConnectionsController {
       return response(res, {
         code: 201,
         success: true,
-        message: "Disconnected successfully.",
+        message: 'Disconnected successfully.',
       });
     } catch (error: any) {
       return exceptionResponse(res, error);

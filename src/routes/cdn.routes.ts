@@ -1,7 +1,7 @@
-import { Router } from "express";
-import { auth } from "../middlewares/authenticate";
-import { upload } from "../middlewares/upload";
-import CdnController from "../controllers/cdn/index.ctrl";
+import { Router } from 'express';
+import { auth } from '../middlewares/authenticate';
+import { upload } from '../middlewares/upload';
+import CdnController from '../controllers/cdn/index.ctrl';
 
 class CdnRoutes {
   public router = Router();
@@ -9,11 +9,11 @@ class CdnRoutes {
 
   constructor() {
     this.router.post(
-      "/upload-file",
+      '/upload-file',
       auth,
       upload.fields([
         {
-          name: "attachment",
+          name: 'attachment',
         },
       ]),
       this.controller.uploadFile,

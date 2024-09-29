@@ -1,10 +1,10 @@
-import { type Application } from "express";
-import helmet from "helmet";
-import morgan from "morgan";
-import rateLimit, { type RateLimitRequestHandler } from "express-rate-limit";
-import cors from "cors";
-import { json as bodyParserJson } from "body-parser";
-import Routes from "./routes";
+import { type Application } from 'express';
+import helmet from 'helmet';
+import morgan from 'morgan';
+import rateLimit, { type RateLimitRequestHandler } from 'express-rate-limit';
+import cors from 'cors';
+import { json as bodyParserJson } from 'body-parser';
+import Routes from './routes';
 
 const RATE_LIMIT_MAX = 10;
 const RATE_LIMIT_WINDOW_MS = 5000;
@@ -30,9 +30,7 @@ export default class Server {
     this.app.use(helmet());
     this.app.use(this.limiter);
     this.app.use(bodyParserJson());
-    this.app.use(
-      morgan(":method :url :status :res[content-length] - :response-time ms"),
-    );
+    this.app.use(morgan(':method :url :status :res[content-length] - :response-time ms'));
   }
 
   private configureRoutes(): void {

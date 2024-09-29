@@ -1,19 +1,19 @@
 export enum Env {
-  production = "production",
-  development = "development",
-  test = "test",
+  production = 'production',
+  development = 'development',
+  test = 'test',
 }
 
 export const initConfig = () => {
   switch (config.env) {
     case Env.production:
-      console.log("Production environment");
+      console.log('Production environment');
       break;
     case Env.development:
-      console.log("Development environment");
+      console.log('Development environment');
       break;
     case Env.test:
-      console.log("Test environment");
+      console.log('Test environment');
       break;
     default:
       throw new Error(`Unknown environment: ${config.env}`);
@@ -27,15 +27,15 @@ export const config = {
   mongoDB: {
     host: process.env.MONGODB_HOST,
     port: process.env.MONGODB_PORT,
-    dbName: process.env.MONGODB_DB_NAME,
+    dbName: process.env.MONGODB_NAME,
   },
   secrets: {
     jwt: process.env.JWT_SECRET as string,
     jwtExp: 31557600,
   },
   email: {
-    user: process.env.EMAIL_USER,
-    pass: process.env.EMAIL_PASS,
+    user: process.env.NODEMAILER_USER,
+    pass: process.env.NODEMAILER_PASS,
   },
   bunny: {
     accessKey: process.env.BUNNY_ACCESS_KEY,
@@ -48,5 +48,6 @@ export const config = {
     clientSecret: process.env.DISCORD_CLIENT_SECRET as string,
     token: process.env.DISCORD_TOKEN as string,
   },
+  finance: {},
   saltWorkFactor: 10,
 };

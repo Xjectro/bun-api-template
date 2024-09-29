@@ -1,8 +1,8 @@
-import { type Request, type Response } from "express";
-import { exceptionResponse, response } from "../../api/commons/response";
-import CDNHelpers from "./helpers.utils";
-import { InternalServerError } from "../../api/commons/exceptions";
-import { uploadFile } from "../../services/media.services";
+import { type Request, type Response } from 'express';
+import { exceptionResponse, response } from '../../api/commons/response';
+import CDNHelpers from './helpers.utils';
+import { InternalServerError } from '../../api/commons/exceptions';
+import { uploadFile } from '../../services/media.services';
 
 export default class CDNController {
   private helpers = new CDNHelpers();
@@ -12,7 +12,7 @@ export default class CDNController {
       const attachment = (req.files as any)?.attachment[0];
 
       if (!attachment) {
-        throw new InternalServerError("No file uploaded");
+        throw new InternalServerError('No file uploaded');
       }
 
       const uploadResponse = await uploadFile(attachment);
@@ -20,7 +20,7 @@ export default class CDNController {
       return response(res, {
         code: 201,
         success: true,
-        message: "File uploaded.",
+        message: 'File uploaded.',
         data: uploadResponse,
       });
     } catch (error: any) {

@@ -1,0 +1,7 @@
+POST http://localhost:5000/api/token/refresh HTTP/1.1
+
+Content-Type: application/json
+
+{
+    "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjgzMDM5NDcyNzY4NDg5ODg1NiIsImlhdCI6MTcwMDMyMTExNn0.iiVUZXd56JCr10gJilhYfmB_MbLTjvU1-WuFdd4K1SE"
+}
